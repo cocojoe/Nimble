@@ -78,7 +78,9 @@ public func recordFailure(_ message: String, location: SourceLocation) {
 #else
     if let testCase = CurrentTestCaseTracker.sharedInstance.currentTestCase {
         let line = Int(location.line)
-        testCase.recordFailure(withDescription: message, inFile: location.file, atLine: line, expected: true)
+        if #available(OSXApplicationExtension 13.0, *) {
+            testCase.recordFailure(withDescription: message, inFile: location.file, atLine: line, expected: true)
+        }
     } else {
         let msg = """
             Attempted to report a test failure to XCTest while no test case was running. The failure was:
